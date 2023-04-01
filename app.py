@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_smorest import Api
+from flask_migrate import Migrate
 
 from db import db
 import models
@@ -11,10 +12,12 @@ from resources.employee import blueprint as EmployeeBlueprint
 from resources.office_post import blueprint as OfficePostBlueprint
 from resources.department import blueprint as DepartmentBlueprint
 from resources.office import blueprint as OfficeBlueprint
+from flask_cors import CORS
 
 def create_app():
 
     app = Flask(__name__, instance_path=os.getcwd())
+    CORS(app)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "HRMS REST API"
@@ -28,12 +31,10 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
+    migrate = Migrate(app, db)
+    
 
     api = Api(app)
-    
-    @app.before_first_request
-    def create_tables():
-        db.create_all()
 
     api.register_blueprint(ReligionBlueprint)
     api.register_blueprint(MaritalStatusBlueprint)

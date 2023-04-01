@@ -2,6 +2,7 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
+from flask_migrate import Migrate
 from schemas import OfficeSchema, OfficeUpdateSchema
 from models import OfficeModel
 from db import db
@@ -13,7 +14,7 @@ blueprint = Blueprint("offices", __name__, description="Operations on offices")
 class Office(MethodView):
     @blueprint.response(200, OfficeSchema)
     def get(self, office_id):
-        office = OfficeSchema.query.get_or_404(office_id)
+        office = OfficeModel.query.get_or_404(office_id)
         return office
     
     @blueprint.arguments(OfficeUpdateSchema)

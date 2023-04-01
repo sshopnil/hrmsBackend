@@ -10,8 +10,8 @@ class OfficePostModel(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey("departments.id"), unique = False, nullable = False)
     department = db.relationship("DepartmentModel", back_populates = "office_posts")
     
-    #employee_id = db.Column(db.Integer, db.ForeignKey("employees.id"), unique = False, nullable = False)
-    #employee = db.relationship("EmployeeModel", back_populates = "office_post")
+    employee_id = db.Column(db.Integer, db.ForeignKey("employees.id"), unique = False, nullable = True)
+    employee = db.relationship("EmployeeModel", back_populates = "_office_post")
     
     
     

@@ -2,7 +2,7 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import OfficePostSchema
+from schemas import OfficePostSchema, OfficePostUpdateSchema
 from models import OfficePostModel
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -16,21 +16,20 @@ class OfficePost(MethodView):
         office_post = OfficePostModel.query.get_or_404(office_post_id)
         return office_post
     
-    """
+
     @blueprint.arguments(OfficePostUpdateSchema)
     @blueprint.response(200, OfficePostSchema)
-    def put(self, office_post_id, employee_id):
+    def put(self, office_post_data, office_post_id):
+        office_post = OfficePostModel.query.get_or_404(office_post_id)
         
-        office_post = OfficePostModel.query.get(office_post_id)
-    
-        office_post[employee_id] = employee_id
-        
+        if office_post:
+            office_post.employee_id = office_post_data["employee_id"]
             
         db.session.add(office_post)
         db.session.commit()
         
         return office_post
-    """          
+            
 @blueprint.route("/office_post")
 class OfficePostList(MethodView):
     @blueprint.response(200, OfficePostSchema(many=True))

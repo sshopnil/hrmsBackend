@@ -40,6 +40,8 @@ class EmployeeSchema(PlainEmployeeSchema):
     
     marital_status_id = fields.Int(required=True, load_only = True)
     marital_status = fields.Nested(PlainMaritalStatusSchema(), dump_only = True)
+    
+    _office_post = fields.Nested(PlainEmployeeSchema(), dump_only = True)
 
 class PlainDepartmentSchema(Schema):
     id = fields.Integer(dump_only=True)
@@ -56,6 +58,10 @@ class DepartmentSchema(PlainDepartmentSchema):
 class OfficePostSchema(PlainOfficePostSchema):
     department_id = fields.Int(required=True, load_only = True)
     department = fields.Nested(PlainDepartmentSchema(), dump_only = True)
+    
+    employee_id = fields.Int(load_only = True)
+    employee = fields.Nested(PlainEmployeeSchema(), dump_only = True)
+    
 
 class OfficeSchema(Schema):
     id = fields.Integer(dump_only=True)
@@ -70,7 +76,11 @@ class OfficeUpdateSchema(Schema):
     address = fields.Str()
     website = fields.Str()
     
-
+class OfficePostUpdateSchema(Schema):
+    name = fields.Str()
+    parent_id = fields.Integer()
+    department_id = fields.Integer()
+    employee_id = fields.Integer()
 
     
     

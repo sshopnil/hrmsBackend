@@ -17,7 +17,7 @@ class EmployeeModel(db.Model):
     marital_status_id = db.Column(db.Integer, db.ForeignKey("marital_statuses.id"), unique = False, nullable = False)
     marital_status = db.relationship("MaritalStatusModel", back_populates = "employees")
     
-    #office_post = db.relationship("OfficePostModel", back_populates = "employee", lazy = "dynamic")
+    _office_post = db.relationship("OfficePostModel", back_populates = "employee", lazy = "dynamic")
     
     
     
