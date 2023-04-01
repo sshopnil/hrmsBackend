@@ -57,7 +57,19 @@ class OfficePostSchema(PlainOfficePostSchema):
     department_id = fields.Int(required=True, load_only = True)
     department = fields.Nested(PlainDepartmentSchema(), dump_only = True)
 
-
+class OfficeSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    phone = fields.Str(required=True)
+    email = fields.Str(required=True)
+    address = fields.Str(required=True)
+    website = fields.Str(required=True)
+    
+class OfficeUpdateSchema(Schema):
+    phone = fields.Str()
+    email = fields.Str()
+    address = fields.Str()
+    website = fields.Str()
+    
 
 
     

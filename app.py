@@ -10,6 +10,7 @@ from resources.marital_status import blueprint as MaritalStatusBlueprint
 from resources.employee import blueprint as EmployeeBlueprint
 from resources.office_post import blueprint as OfficePostBlueprint
 from resources.department import blueprint as DepartmentBlueprint
+from resources.office import blueprint as OfficeBlueprint
 
 def create_app():
 
@@ -39,6 +40,7 @@ def create_app():
     api.register_blueprint(EmployeeBlueprint)
     api.register_blueprint(OfficePostBlueprint)
     api.register_blueprint(DepartmentBlueprint)
+    api.register_blueprint(OfficeBlueprint)
     
     return app
 
