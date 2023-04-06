@@ -20,6 +20,7 @@ class EmployeeModel(db.Model):
     
     _office_post = db.relationship("OfficePostModel", back_populates = "employee", lazy = "dynamic")
     
+    leaves = db.relationship("LeaveModel", back_populates = "employee", lazy = "dynamic")
     
     
     

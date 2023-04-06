@@ -7,6 +7,8 @@ from models import EmployeeModel
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 import hashlib
+from schemas import LoginRequestSchema, LoginResponseSchema
+from schemas import ChangePasswordRequestSchema, ChangePasswordResponseSchema
 
 blueprint = Blueprint("employees", __name__, description="Operations on employees")
 
@@ -69,3 +71,51 @@ class EmployeeList(MethodView):
             abort(500, message = str(employee_data))
         
         return employee
+    
+@blueprint.route("/employee/user_name/<string:user_name>")
+class EmployeeList(MethodView):
+    @blueprint.response(200, EmployeeSchema)
+    def get(self, user_name):
+        employee = EmployeeModel.query.filter_by(user_name=user_name).first()
+        return employee
+
+    
+@blueprint.route("/employee/login")
+class Login(MethodView):
+    @blueprint.arguments(LoginRequestSchema)
+    @blueprint.response(200, LoginResponseSchema)
+    def post(self, login_data):
+        user_name = login_data["user_name"]
+        password_input = login_data["password"]
+        password_input_hashed = hashlib.sha256(password_input.encode()).hexdigest()
+        
+        employee = EmployeeModel.query.filter_by(user_name=user_name).first()
+        
+        if employee.password == password_input_hashed:
+            if employee.password == "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5":
+                return {"login_status": "success", "change_password_status": 0}
+            else:
+                return {"login_status": "success", "change_password_status": 1}
+        else:
+            return {"login_status": "failure", "change_password_status": 0}
+    
+@blueprint.route("/employee/change_password")
+class Login(MethodView):
+    @blueprint.arguments(ChangePasswordRequestSchema)
+    @blueprint.response(200, ChangePasswordResponseSchema)
+    def post(self, change_password_data):
+        user_name = change_password_data["user_name"]
+        password_changed = change_password_data["password"]
+        
+        employee = EmployeeModel.query.filter_by(user_name=user_name).first()
+        password_changed_hashed = hashlib.sha256(password_changed.encode()).hexdigest()
+        employee.password = password_changed_hashed
+        
+        db.session.add(employee)
+        db.session.commit()
+        
+        return {"change_password_status": 1}
+        
+        
+        
+        

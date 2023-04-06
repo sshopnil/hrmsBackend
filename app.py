@@ -12,6 +12,9 @@ from resources.employee import blueprint as EmployeeBlueprint
 from resources.office_post import blueprint as OfficePostBlueprint
 from resources.department import blueprint as DepartmentBlueprint
 from resources.office import blueprint as OfficeBlueprint
+from resources.leave_type import blueprint as LeaveTypeBlueprint
+from resources.leave import blueprint as LeaveBlueprint
+
 from flask_cors import CORS
 
 def create_app():
@@ -39,9 +42,13 @@ def create_app():
     api.register_blueprint(ReligionBlueprint)
     api.register_blueprint(MaritalStatusBlueprint)
     api.register_blueprint(EmployeeBlueprint)
+    
     api.register_blueprint(OfficePostBlueprint)
     api.register_blueprint(DepartmentBlueprint)
     api.register_blueprint(OfficeBlueprint)
+    
+    api.register_blueprint(LeaveBlueprint)
+    api.register_blueprint(LeaveTypeBlueprint)
     
     return app
 

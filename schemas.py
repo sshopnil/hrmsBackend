@@ -17,6 +17,26 @@ class PlainEmployeeSchema(Schema):
     address_perm = fields.Str(required=True)
     address_curr = fields.Str(required=True)
     #password = fields.Str(required=True)
+    
+class PlainLeaveTypeSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    name = fields.Str(required=True)
+    
+class PlainLeaveSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    leave_start_date = fields.Str(required=True)
+    leave_end_date = fields.Str(required=True)
+    leave_approval_status = fields.Integer(required=True)
+    
+class LeaveTypeSchema(PlainLeaveTypeSchema):
+    leaves = fields.List(fields.Nested(PlainLeaveSchema, dump_only = True))
+    
+class LeaveSchema(PlainLeaveSchema):
+    leave_type_id = fields.Int(required=True, load_only = True)
+    leave_type = fields.Nested(PlainLeaveTypeSchema(), dump_only = True)
+    
+    employee_id = fields.Int(required=True, load_only = True)
+    employee = fields.Nested(PlainEmployeeSchema(), dump_only = True)
 
 class EmployeeUpdateSchema(Schema):
     name = fields.Str()
@@ -44,6 +64,8 @@ class EmployeeSchema(PlainEmployeeSchema):
     marital_status = fields.Nested(PlainMaritalStatusSchema(), dump_only = True)
     
     _office_post = fields.Nested(PlainEmployeeSchema(), dump_only = True)
+    
+    leaves = fields.List(fields.Nested(PlainLeaveSchema(), dump_only = True))
 
 class PlainDepartmentSchema(Schema):
     id = fields.Integer(dump_only=True)
@@ -83,6 +105,35 @@ class OfficePostUpdateSchema(Schema):
     parent_id = fields.Integer()
     department_id = fields.Integer()
     employee_id = fields.Integer()
+    
+class LoginRequestSchema(Schema):
+    user_name = fields.Str()
+    password = fields.Str()
+    
+class LoginResponseSchema(Schema):
+    login_status = fields.Str()
+    change_password_status = fields.Integer()
+
+class ChangePasswordRequestSchema(Schema):
+    user_name = fields.Str()
+    password = fields.Str()
+    
+class ChangePasswordResponseSchema(Schema):
+    change_password_status = fields.Integer()
+
+class LeaveUpdateSchema(Schema):
+    leave_type_id = fields.Integer()
+    leave_start_date = fields.Str()
+    leave_end_date = fields.Str()
+    leave_approval_status = fields.Integer()
+    employee_id = fields.Integer()
+    
+    
+    
+
+
+    
+    
 
     
     
