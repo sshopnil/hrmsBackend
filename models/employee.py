@@ -10,6 +10,7 @@ class EmployeeModel(db.Model):
     dob = db.Column(db.String(10), unique = False, nullable= False)
     address_perm = db.Column(db.String(80), unique = False, nullable= False)
     address_curr = db.Column(db.String(80), unique = False, nullable= False)
+    password = db.Column(db.String(80), unique = False, nullable= False, default = '0')
     
     religion_id = db.Column(db.Integer, db.ForeignKey("religions.id"), unique = False, nullable = False)
     religion = db.relationship("ReligionModel", back_populates = "employees")
@@ -18,6 +19,7 @@ class EmployeeModel(db.Model):
     marital_status = db.relationship("MaritalStatusModel", back_populates = "employees")
     
     _office_post = db.relationship("OfficePostModel", back_populates = "employee", lazy = "dynamic")
+    
     
     
     

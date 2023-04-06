@@ -2,7 +2,7 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from flask_migrate import Migrate
+
 from schemas import OfficeSchema, OfficeUpdateSchema
 from models import OfficeModel
 from db import db

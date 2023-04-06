@@ -16,6 +16,7 @@ class PlainEmployeeSchema(Schema):
     dob = fields.Str(required=True)
     address_perm = fields.Str(required=True)
     address_curr = fields.Str(required=True)
+    #password = fields.Str(required=True)
 
 class EmployeeUpdateSchema(Schema):
     name = fields.Str()
@@ -27,6 +28,7 @@ class EmployeeUpdateSchema(Schema):
     
     religion_id = fields.Int()
     marital_status_id = fields.Int()
+    password = fields.Str()
     
 class ReligionSchema(PlainReligionSchema):
     employees = fields.List(fields.Nested(PlainEmployeeSchema), dump_only = True)

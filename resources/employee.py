@@ -6,6 +6,7 @@ from schemas import EmployeeSchema, EmployeeUpdateSchema
 from models import EmployeeModel
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+import hashlib
 
 blueprint = Blueprint("employees", __name__, description="Operations on employees")
 
@@ -55,6 +56,9 @@ class EmployeeList(MethodView):
     @blueprint.response(201, EmployeeSchema)
     def post(self, employee_data):
         employee = EmployeeModel(**employee_data)
+        generic_password = "12345"
+        generic_password_hashed = hashlib.sha256(generic_password.encode()).hexdigest()
+        employee.password = generic_password_hashed
         
         try:
             db.session.add(employee)
