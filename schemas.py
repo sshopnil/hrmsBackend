@@ -65,7 +65,7 @@ class EmployeeSchema(PlainEmployeeSchema):
     
     _office_post = fields.Nested(PlainEmployeeSchema(), dump_only = True)
     
-    leaves = fields.List(fields.Nested(PlainLeaveSchema(), dump_only = True))
+    leaves = fields.List(fields.Nested(LeaveSchema(), dump_only = True))
 
 class PlainDepartmentSchema(Schema):
     id = fields.Integer(dump_only=True)
@@ -127,6 +127,14 @@ class LeaveUpdateSchema(Schema):
     leave_end_date = fields.Str()
     leave_approval_status = fields.Integer()
     employee_id = fields.Integer()
+    
+class EmployeeLeaveInfoSchema(Schema):
+    leave_id = fields.Integer()
+    employee_id = fields.Integer()
+    employee_name = fields.Str()
+    leave_start_date = fields.Str()
+    leave_end_date =  fields.Str()
+    leave_type_name =  fields.Str()
     
     
     

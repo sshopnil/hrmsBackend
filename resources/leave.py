@@ -2,8 +2,8 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import LeaveSchema, LeaveTypeSchema, LeaveUpdateSchema
-from models import LeaveModel
+from schemas import LeaveSchema, LeaveTypeSchema, LeaveUpdateSchema, OfficePostSchema, EmployeeSchema, EmployeeLeaveInfoSchema
+from models import LeaveModel, OfficePostModel
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 import hashlib
@@ -57,6 +57,59 @@ class LeaveListOnApproval(MethodView):
     @blueprint.response(200, LeaveSchema(many=True))
     def get(self, leave_approval_status):
         return LeaveModel.query.filter_by(leave_approval_status = leave_approval_status)
+
+"""       
+@blueprint.route("/leave/subordinate_leave/<string:office_post_id>")
+class LeaveListSubordinate(MethodView):
+    @blueprint.response(200, OfficePostSchema(many=True))
+    def get_subordinate(self):
+        #office_posts_supervisee = OfficePostModel.query.filter_by(parent_id = office_post_id)
+        office_posts_supervisee = OfficePostModel.query.all()
+        return office_posts_supervisee
+"""
+
+@blueprint.route("/leave/subordinate_leave/<string:office_post_id>")
+class LeaveList(MethodView):
+    @blueprint.response(200, EmployeeLeaveInfoSchema(many=True))
+    def get(self, office_post_id):
+        office_post_supervisees =  OfficePostModel.query.filter_by(parent_id = office_post_id)
+        employee_supervisees = []
         
-    
-    
+        for office_post_supervisee in office_post_supervisees:
+            employee_supervisee = office_post_supervisee.employee
+            employee_supervisees.append(employee_supervisee)
+            
+        list_employee_leave_info = []
+        
+        for employee_supervisee in employee_supervisees:
+            leaves_employee = LeaveModel.query.filter_by(employee_id = employee_supervisee.id)
+            
+            for leave_employee in leaves_employee:
+                if leave_employee.leave_approval_status ==0:
+                    employee_leave_info = {
+                        "leave_id": leave_employee.id,
+                        "employee_id": employee_supervisee.id,
+                        "employee_name": employee_supervisee.name,
+                        "leave_approval_status": leave_employee.leave_approval_status,
+                        "leave_start_date": leave_employee.leave_start_date,
+                        "leave_end_date": leave_employee.leave_end_date,
+                        "leave_type_name": leave_employee.leave_type.name
+                    } 
+                print(employee_leave_info)
+                
+                list_employee_leave_info.append(employee_leave_info)
+        
+        return list_employee_leave_info
+        
+        
+        
+        
+
+            
+  
+        
+        
+        
+        
+        
+        
