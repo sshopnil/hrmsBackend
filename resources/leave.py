@@ -85,7 +85,7 @@ class LeaveList(MethodView):
             leaves_employee = LeaveModel.query.filter_by(employee_id = employee_supervisee.id)
             
             for leave_employee in leaves_employee:
-                if leave_employee.leave_approval_status ==0:
+                if leave_employee.leave_approval_status == 0: 
                     employee_leave_info = {
                         "leave_id": leave_employee.id,
                         "employee_id": employee_supervisee.id,
@@ -99,7 +99,9 @@ class LeaveList(MethodView):
                 
                 list_employee_leave_info.append(employee_leave_info)
         
-        return list_employee_leave_info
+        unique = { each['leave_id'] : each for each in list_employee_leave_info }.values()
+        
+        return unique
         
         
         
