@@ -28,6 +28,26 @@ class PlainLeaveSchema(Schema):
     leave_end_date = fields.Str(required=True)
     leave_approval_status = fields.Integer(required=True)
     
+class PlainDailyAttendanceSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    date = fields.Str(required=True)
+    
+    day = fields.Integer()
+    month = fields.Integer()
+    year = fields.Integer()
+    
+    office_entry_time = fields.Str(required=True)
+    office_exit_time = fields.Str(required=True)
+    
+    late_status = fields.Integer()
+    late_approval_status = fields.Integer()
+    late_cause = fields.Str()
+    
+class PlainOfficePostSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    name = fields.Str(required=True)
+    parent_id = fields.Integer(required=True)
+    
 class LeaveTypeSchema(PlainLeaveTypeSchema):
     leaves = fields.List(fields.Nested(PlainLeaveSchema, dump_only = True))
     
@@ -63,18 +83,16 @@ class EmployeeSchema(PlainEmployeeSchema):
     marital_status_id = fields.Int(required=True, load_only = True)
     marital_status = fields.Nested(PlainMaritalStatusSchema(), dump_only = True)
     
-    _office_post = fields.Nested(PlainEmployeeSchema(), dump_only = True)
+    _office_post = fields.Nested(PlainOfficePostSchema(), dump_only = True)
     
     leaves = fields.List(fields.Nested(LeaveSchema(), dump_only = True))
+    daily_attendances = fields.List(fields.Nested(PlainDailyAttendanceSchema(), dump_only = True))
 
 class PlainDepartmentSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.Str(required=True)
 
-class PlainOfficePostSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    name = fields.Str(required=True)
-    parent_id = fields.Integer(required=True)
+
     
 class DepartmentSchema(PlainDepartmentSchema):
     office_posts = fields.List(fields.Nested(PlainOfficePostSchema()), dump_only = True)
@@ -136,10 +154,21 @@ class EmployeeLeaveInfoSchema(Schema):
     leave_end_date =  fields.Str()
     leave_type_name =  fields.Str()
     
-    
-    
+class DailyAttendanceSchema(PlainDailyAttendanceSchema):
+    employee_id = fields.Int(load_only = True)
+    employee = fields.Nested(PlainEmployeeSchema(), dump_only = True)
 
+class DailyAttendanceUpdateSchema(Schema):
+    late_approval_status = fields.Int()
+    late_cause = fields.Str()
 
+class DailyAttendanceStatusSchema(Schema):
+    daily_attendance_id = fields.Integer()
+    employee_id = fields.Integer()
+    employee_name = fields.Str()
+    date = fields.Str()
+    office_entry_time =  fields.Str()
+    office_exit_time =  fields.Str()
     
     
 

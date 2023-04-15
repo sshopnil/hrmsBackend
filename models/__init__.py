@@ -6,3 +6,4 @@ from models.office_post import OfficePostModel
 from models.office import OfficeModel
 from models.leave import LeaveModel
 from models.leave_type import LeaveTypeModel
+from models.daily_attendance import DailyAttendanceModel

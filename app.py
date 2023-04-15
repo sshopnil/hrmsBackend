@@ -14,6 +14,7 @@ from resources.department import blueprint as DepartmentBlueprint
 from resources.office import blueprint as OfficeBlueprint
 from resources.leave_type import blueprint as LeaveTypeBlueprint
 from resources.leave import blueprint as LeaveBlueprint
+from resources.daily_attendance import blueprint as DailyAttendanceBlueprint
 
 from flask_cors import CORS
 
@@ -49,6 +50,10 @@ def create_app():
     
     api.register_blueprint(LeaveBlueprint)
     api.register_blueprint(LeaveTypeBlueprint)
+    
+    api.register_blueprint(DailyAttendanceBlueprint)
+    
+    
     
     return app
 

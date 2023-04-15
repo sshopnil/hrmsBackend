@@ -22,5 +22,6 @@ class EmployeeModel(db.Model):
     
     leaves = db.relationship("LeaveModel", back_populates = "employee", lazy = "dynamic")
     
+    daily_attendances = db.relationship("DailyAttendanceModel", back_populates = "employee", lazy = "dynamic")
     
     
