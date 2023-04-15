@@ -95,9 +95,9 @@ class LeaveList(MethodView):
                         "leave_end_date": leave_employee.leave_end_date,
                         "leave_type_name": leave_employee.leave_type.name
                     } 
-                print(employee_leave_info)
+                    print(employee_leave_info)
                 
-                list_employee_leave_info.append(employee_leave_info)
+                    list_employee_leave_info.append(employee_leave_info)
         
         unique = { each['leave_id'] : each for each in list_employee_leave_info }.values()
         
