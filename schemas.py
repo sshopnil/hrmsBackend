@@ -36,8 +36,8 @@ class PlainDailyAttendanceSchema(Schema):
     month = fields.Integer()
     year = fields.Integer()
     
-    office_entry_time = fields.Str(required=True)
-    office_exit_time = fields.Str(required=True)
+    office_entry_time = fields.Str()
+    office_exit_time = fields.Str()
     
     late_status = fields.Integer()
     late_approval_status = fields.Integer()
