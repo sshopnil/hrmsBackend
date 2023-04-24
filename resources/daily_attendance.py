@@ -77,38 +77,48 @@ class DailyAttendanceList(MethodView):
     @blueprint.response(201, DailyAttendanceSchema)
     def post(self, daily_attendance_data):
         daily_attendance = DailyAttendanceModel(**daily_attendance_data)
+        print(daily_attendance.employee_id)
         entry_time = daily_attendance.office_entry_time
-        hour = entry_time[:2]
-        minute = entry_time[3:5]
+        print("entry time:")
+        print(entry_time)
         
-        print('hour:', hour)
-        print('minute:', minute)
-        
-        date = daily_attendance.date
-        
-        splitted_string = date.split("/")
-        
-        daily_attendance.month = int(splitted_string[0])
-        daily_attendance.day = int(splitted_string[1])
-        daily_attendance.year = int(splitted_string[2])
-        
-        #print(daily_attendance)
-        
-        if int(hour) < 9:
-            daily_attendance.late_status = 0
-        elif int(hour) >= 9 and int(minute) == 0:
-            daily_attendance.late_status = 0
-        else:
-            daily_attendance.late_status = 1
+        if entry_time != None:
             
+            hour = entry_time[:2]
+            minute = entry_time[3:5]
+            
+            print('hour:', hour)
+            print('minute:', minute)
+            
+            date = daily_attendance.date
+            
+            splitted_string = date.split("/")
+            
+            daily_attendance.month = int(splitted_string[0])
+            daily_attendance.day = int(splitted_string[1])
+            daily_attendance.year = int(splitted_string[2])
+            
+            #print(daily_attendance)
+            
+            if int(hour) < 9:
+                daily_attendance.late_status = 0
+            elif int(hour) >= 9 and int(minute) == 0:
+                daily_attendance.late_status = 0
+            else:
+                daily_attendance.late_status = 1
+                
+            
+        else:
+            daily_attendance.late_status = 2
+        
         try:
             db.session.add(daily_attendance)
             db.session.commit()
-        except IntegrityError:
-            abort(400, message = "An error occured!")
+        except IntegrityError as e:
+            abort(400, message = str(e))
         except SQLAlchemyError as e:
-            abort(500, message = str(daily_attendance_data))
-        
+            abort(500, message = str(e))
+            
         return daily_attendance
     
 @blueprint.route("/daily_attendance/<string:employee_id>/<string:month>/<string:year>")

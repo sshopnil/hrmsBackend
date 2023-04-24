@@ -11,8 +11,8 @@ class DailyAttendanceModel(db.Model):
     year = db.Column(db.Integer, unique = False, nullable = True)
     
     
-    office_entry_time = db.Column(db.String(10), unique = False, nullable= False)
-    office_exit_time = db.Column(db.String(10), unique = False, nullable= False)
+    office_entry_time = db.Column(db.String(10), unique = False, nullable= True)
+    office_exit_time = db.Column(db.String(10), unique = False, nullable= True)
     
     late_status = db.Column(db.Integer, unique = False)
     late_cause = db.Column(db.String(100), unique = False)
