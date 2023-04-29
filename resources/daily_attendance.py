@@ -82,6 +82,14 @@ class DailyAttendanceList(MethodView):
         print("entry time:")
         print(entry_time)
         
+        date = daily_attendance.date
+            
+        splitted_string = date.split("-")
+        
+        daily_attendance.month = int(splitted_string[0])
+        daily_attendance.day = int(splitted_string[1])
+        daily_attendance.year = int(splitted_string[2])
+        
         if entry_time != None:
             
             hour = entry_time[:2]
@@ -90,13 +98,7 @@ class DailyAttendanceList(MethodView):
             print('hour:', hour)
             print('minute:', minute)
             
-            date = daily_attendance.date
             
-            splitted_string = date.split("/")
-            
-            daily_attendance.month = int(splitted_string[0])
-            daily_attendance.day = int(splitted_string[1])
-            daily_attendance.year = int(splitted_string[2])
             
             #print(daily_attendance)
             
@@ -186,6 +188,46 @@ class LeaveList(MethodView):
         
         #return unique
         return list_employee_attendance_info
+    
+    
+@blueprint.route("/daily_attendance/<string:daily_attendance_id>")
+class DailyAttendanceUpdate(MethodView):
+    @blueprint.arguments(DailyAttendanceUpdateSchema)
+    @blueprint.response(200, DailyAttendanceSchema)
+    def put(self, daily_attendance_data, daily_attendance_id):
+        daily_attendance = DailyAttendanceModel.query.get(daily_attendance_id)
+        
+        daily_attendance.office_entry_time = daily_attendance_data["office_entry_time"]
+        daily_attendance.office_exit_time = daily_attendance_data["office_exit_time"]
+        
+        
+        #daily_attendance.office_entry_time = daily_attendance_data["office_entry_time"]
+        #daily_attendance.office_entry_time = daily_attendance_data["office_entry_time"]
+        if daily_attendance.office_entry_time != None:
+            
+            hour = daily_attendance.office_entry_timetime[:2]
+            minute = daily_attendance.office_entry_timetime[3:5]
+            
+            print('hour:', hour)
+            print('minute:', minute)
+            
+            if int(hour) < 9:
+                daily_attendance.late_status = 0
+            elif int(hour) >= 9 and int(minute) == 0:
+                daily_attendance.late_status = 0
+            else:
+                daily_attendance.late_status = 1
+                
+            
+        else:
+            daily_attendance.late_status = 2
+        
+        
+        
+        db.session.add(daily_attendance)
+        db.session.commit()
+        
+        return daily_attendance
         
       
         
