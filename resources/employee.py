@@ -33,6 +33,7 @@ class Employee(MethodView):
             employee.address_curr = employee_data["address_curr"]
             employee.religion_id = employee_data["religion_id"]
             employee.marital_status_id = employee_data["marital_status_id"]
+            employee.user_image = employee_data["user_image"]
         else:
             employee = EmployeeModel(employee_id, **employee_data)
             

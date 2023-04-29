@@ -12,6 +12,8 @@ class EmployeeModel(db.Model):
     address_curr = db.Column(db.String(80), unique = False, nullable= False)
     password = db.Column(db.String(80), unique = False, nullable= False, default = '0')
     
+    user_image = db.Column(db.String(80), unique = True, nullable= True)
+    
     religion_id = db.Column(db.Integer, db.ForeignKey("religions.id"), unique = False, nullable = False)
     religion = db.relationship("ReligionModel", back_populates = "employees")
     

@@ -16,6 +16,8 @@ class PlainEmployeeSchema(Schema):
     dob = fields.Str(required=True)
     address_perm = fields.Str(required=True)
     address_curr = fields.Str(required=True)
+    
+    user_image = fields.Str()
     #password = fields.Str(required=True)
     
 class PlainLeaveTypeSchema(Schema):
@@ -65,6 +67,7 @@ class EmployeeUpdateSchema(Schema):
     dob = fields.Str()
     address_perm = fields.Str()
     address_curr = fields.Str()
+    user_image = fields.Str()
     
     religion_id = fields.Int()
     marital_status_id = fields.Int()
