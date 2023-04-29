@@ -173,10 +173,15 @@ class DailyAttendanceStatusSchema(Schema):
     office_entry_time =  fields.Str()
     office_exit_time =  fields.Str()
     
-class LeaveStatus(Schema):
+class LeaveApprovalStatus(Schema):
     status_id = fields.Integer()
     status_name = fields.Str()
     status_count = fields.Integer()
+    
+class LeaveTypeStatus(Schema):
+    type_id = fields.Integer()
+    type_name = fields.Str()
+    type_count = fields.Integer()
 
     
     

@@ -2,7 +2,7 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import LeaveSchema, LeaveTypeSchema, LeaveUpdateSchema, OfficePostSchema, EmployeeSchema, EmployeeLeaveInfoSchema, LeaveStatus
+from schemas import LeaveSchema, LeaveTypeSchema, LeaveUpdateSchema, OfficePostSchema, EmployeeSchema, EmployeeLeaveInfoSchema, LeaveApprovalStatus, LeaveTypeStatus
 from models import LeaveModel, OfficePostModel
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -103,9 +103,9 @@ class LeaveList(MethodView):
         
         return unique
         
-@blueprint.route("/leave/all_status")
+@blueprint.route("/leave/all_statuses")
 class LeaveApprovalList(MethodView):
-    @blueprint.response(200, LeaveStatus(many=True))
+    @blueprint.response(200, LeaveApprovalStatus(many=True))
     def get(self):
         leaves_employee = LeaveModel.query.all()
             
@@ -147,7 +147,70 @@ class LeaveApprovalList(MethodView):
         
         return leave_status_total
         
+@blueprint.route("/leave/all_types")
+class LeaveTypeList(MethodView):
+    @blueprint.response(200, LeaveTypeStatus(many=True))
+    def get(self):
+        leaves_employee = LeaveModel.query.all()
+            
+        count_leave_casual = 0
+        count_leave_medical = 0
+        count_leave_unpaid = 0
+        count_leave_earned = 0
+        count_leave_maternity = 0
         
+            
+        for leave_employee in leaves_employee:
+            if leave_employee.leave_type_id == 1: 
+                count_leave_casual += 1 
+            elif leave_employee.leave_type_id == 2: 
+                count_leave_medical += 1
+            elif leave_employee.leave_type_id == 3: 
+                count_leave_unpaid += 1
+            elif leave_employee.leave_type_id == 4: 
+                count_leave_earned += 1
+            else:
+                count_leave_maternity += 1
+        
+        leave_casual = {
+            "type_id": 1,
+            "type_name": "ক্যাজুয়াল",
+            "type_count": count_leave_casual
+        }
+        
+        leave_medical = {
+            "type_id": 2,
+            "type_name": "মেডিক্যাল",
+            "type_count": count_leave_medical
+        }
+        
+        leave_unpaid = {
+            "type_id": 3,
+            "type_name": "বিনাবেতন",
+            "type_count": count_leave_unpaid
+        }
+        
+        leave_earned = {
+            "type_id": 4,
+            "type_name": "অর্জিত",
+            "type_count": count_leave_earned
+        }
+        
+        leave_maternity = {
+            "type_id": 5,
+            "type_name": "মাতৃত্বকালীন",
+            "type_count": count_leave_maternity
+        }
+        
+        leave_type_total = []
+        
+        leave_type_total.append(leave_casual)
+        leave_type_total.append(leave_medical)
+        leave_type_total.append(leave_unpaid)
+        leave_type_total.append(leave_earned)
+        leave_type_total.append(leave_maternity)
+        
+        return leave_type_total
   
         
 
