@@ -2,7 +2,7 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import LeaveSchema, LeaveTypeSchema, LeaveUpdateSchema, OfficePostSchema, EmployeeSchema, EmployeeLeaveInfoSchema
+from schemas import LeaveSchema, LeaveTypeSchema, LeaveUpdateSchema, OfficePostSchema, EmployeeSchema, EmployeeLeaveInfoSchema, LeaveStatus
 from models import LeaveModel, OfficePostModel
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -103,8 +103,52 @@ class LeaveList(MethodView):
         
         return unique
         
+@blueprint.route("/leave/all_status")
+class LeaveApprovalList(MethodView):
+    @blueprint.response(200, LeaveStatus(many=True))
+    def get(self):
+        leaves_employee = LeaveModel.query.all()
+            
+        count_leave_pending = 0
+        count_leave_approved = 0
+        count_leave_rejected = 0
+            
+        for leave_employee in leaves_employee:
+            if leave_employee.leave_approval_status == 0: 
+                count_leave_pending += 1 
+            elif leave_employee.leave_approval_status == 1: 
+                count_leave_approved += 1
+            else:
+                count_leave_rejected += 1
+        
+        leave_pending = {
+            "status_id": 0,
+            "status_name": "অপেক্ষমান",
+            "status_count": count_leave_pending
+        }
+        
+        leave_approved = {
+            "status_id": 1,
+            "status_name": "অনুমোদিত",
+            "status_count": count_leave_approved
+        }
+        
+        leave_rejected = {
+            "status_id": 2,
+            "status_name": "প্রত্যাখ্যাত",
+            "status_count": count_leave_rejected
+        }
+        
+        leave_status_total = []
+        
+        leave_status_total.append(leave_pending)
+        leave_status_total.append(leave_approved)
+        leave_status_total.append(leave_rejected)
+        
+        return leave_status_total
         
         
+  
         
 
             
