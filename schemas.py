@@ -16,6 +16,8 @@ class PlainEmployeeSchema(Schema):
     dob = fields.Str(required=True)
     address_perm = fields.Str(required=True)
     address_curr = fields.Str(required=True)
+    
+    user_image = fields.Str()
     #password = fields.Str(required=True)
     
 class PlainLeaveTypeSchema(Schema):
@@ -65,6 +67,7 @@ class EmployeeUpdateSchema(Schema):
     dob = fields.Str()
     address_perm = fields.Str()
     address_curr = fields.Str()
+    user_image = fields.Str()
     
     religion_id = fields.Int()
     marital_status_id = fields.Int()
@@ -170,7 +173,15 @@ class DailyAttendanceStatusSchema(Schema):
     office_entry_time =  fields.Str()
     office_exit_time =  fields.Str()
     
+class LeaveApprovalStatus(Schema):
+    status_id = fields.Integer()
+    status_name = fields.Str()
+    status_count = fields.Integer()
     
+class LeaveTypeStatus(Schema):
+    type_id = fields.Integer()
+    type_name = fields.Str()
+    type_count = fields.Integer()
 
     
     

@@ -121,6 +121,12 @@ class DailyAttendanceList(MethodView):
             
         return daily_attendance
     
+@blueprint.route("/daily_attendance/<string:date>")
+class DailyAttendanceListByDate(MethodView):
+    @blueprint.response(200, DailyAttendanceSchema(many=True))
+    def get(self, date):
+        return DailyAttendanceModel.query.filter_by(date = date)
+    
 @blueprint.route("/daily_attendance/<string:employee_id>/<string:month>/<string:year>")
 class DailyAttendanceList(MethodView):
     @blueprint.response(200, DailyAttendanceSchema(many=True))
